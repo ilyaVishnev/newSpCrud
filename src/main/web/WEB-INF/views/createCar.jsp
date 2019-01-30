@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: Пользователь
@@ -121,11 +122,11 @@
     </script>
 </head>
 <body>
-    <p>Введите марку авто : <select id="brand" name="brand" class="form-control">
-    </select></p>
-    <p>Введите модель авто : <select id="model" name="model" class="form-control">
-    </select></p>
-    <form name="createForm" action="${pageContext.servletContext.contextPath}/create" method="post" id="createForm">
+<p>Введите марку авто : <select id="brand" name="brand" class="form-control">
+</select></p>
+<p>Введите модель авто : <select id="model" name="model" class="form-control">
+</select></p>
+<form:form name="createForm" action="${pageContext.servletContext.contextPath}/create" method="post" id="createForm">
     <p>Выберите год производства : <select id="year" name="year" class="form-control">
     </select></p>
     <p>Коробка скоростей : <select id="gearbox" name="gearbox" class="form-control">
@@ -150,15 +151,15 @@
     <input type="hidden" id="myimage" name="photo" class="image" value="null">
     <input type="submit" value="Добавить объявление" name="create" onclick="return checkEmptyPlaces();"
            class="btn btn-default">
-</form>
+</form:form>
 <h3> Выберите изображение: </h3>
-<form action="${pageContext.servletContext.contextPath}/image" id="formIm" method="post" name="formIm"
+<form:form action="${pageContext.servletContext.contextPath}/image" id="formIm" method="post" name="formIm"
       enctype="multipart/form-data">
     <input type="file" name="file" id="file">
     <br/>
     <input type="button" value="Отправить изображение" onclick="submit()">
-</form>
+</form:form>
 <br/>
-
+<a href="/list">Go to List</a>
 </body>
 </html>

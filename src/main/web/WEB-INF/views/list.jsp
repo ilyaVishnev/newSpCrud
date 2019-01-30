@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: Пользователь
@@ -38,6 +39,12 @@
         var id_brand;
         var myFilter = {today: today, photo: photo, idBrand: id_brand};
         $(document).ready(function () {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
             $.ajax({
                 method: 'GET',
                 dataType: 'json',
@@ -96,7 +103,8 @@
                             "<span class=\"td\"><input type=\"text\" name=\"status\" value=\"" + car.status + "\" disabled /></span>" +
                             "<span class=\"td\"><input type=\"image\" src=\"" + car.photo + "\" width=\"30%\" \n" +
                             "   height=\"25%\"  alt=\"photo\" /></span>" + "<input type=\"hidden\" name=\"carId\" value=\"" +
-                            car.id + "\"/></form>";
+                            car.id + "\"/> <input type=\"hidden\" name=\"${_csrf.parameterName}\"\n" +
+                            "           value=\"${_csrf.token}\" /></form>";
                     })
                     $('#table').empty().html(content);
                 }
@@ -105,18 +113,41 @@
     </script>
 </head>
 <body>
+<c:url value="/logout" var="logoutUrl"/>
+<form action="${logoutUrl}" method="post" id="logoutForm">
+    <input type="hidden" name="${_csrf.parameterName}"
+           value="${_csrf.token}"/>
+</form>
+<script>
+    function formSubmit() {
+        document.getElementById("logoutForm").submit();
+    }
+</script>
+<c:if test="${not empty msg}">
+    <div class="msg">${msg}</div>
+</c:if>
+
+<c:if test="${pageContext.request.userPrincipal.name != null}">
+    <h2>
+        User : ${pageContext.request.userPrincipal.name} | <a
+            href="javascript:formSubmit()"> Logout</a>
+    </h2>
+</c:if>
 <div style="float: left; margin-top: 200px;margin-right: 10px">
-    <form action="${PageContext.servletContext.contextPath}/filterFlist" method="post">
+    <form:form action="/filterFlist" method="post">
         <input type="checkbox" name="photo" id="photo" onchange="submit()">only photo<br>
         <input type="checkbox" name="today" id="today" onchange="submit()">only today<br>
         <select id="brands" name="brands" onchange="submit()"></select>
-    </form>
+    </form:form>
 </div>
 <div class="table" id="table">
 </div>
 </br>
-<form action="${pageContext.servletContext.contextPath}/create" method="get">
+<form:form action="/create" method="get">
     <p><input type="submit" value="Добавить авто" name="add" class="btn btn-default"></p>
-</form>
+</form:form>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+
 </body>
 </html>

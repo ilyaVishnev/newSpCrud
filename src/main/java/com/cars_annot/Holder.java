@@ -13,6 +13,7 @@ public class Holder {
     private int id;
     private String login;
     private String password;
+    private List<Role> roles = new ArrayList<>();
     private List<Car> cars = new ArrayList<>();
 
     public Holder() {
@@ -44,6 +45,20 @@ public class Holder {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "holders_roles",
+            joinColumns = { @JoinColumn(name = "id_holder") },
+            inverseJoinColumns = { @JoinColumn(name = "id_roles") }
+    )
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "holder")

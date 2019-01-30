@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <title>description</title>
@@ -22,8 +23,8 @@
             $.ajax({
                 type: 'GET',
                 url: '/desc',
-                dataType:'json',
-                success:function (data) {
+                dataType: 'json',
+                success: function (data) {
                     var content = " <tr>\n" +
                         "        <td>Описание</td>\n" +
                         "        <td>Корпус</td>\n" +
@@ -34,8 +35,9 @@
                         "    </tr>";
                     var id_holder = data.idHolder;
                     var id = '${user.getId()}';
+                    var admin = '${admin}';
                     var status = data.status;
-                    if (id == id_holder) {
+                    if (id == id_holder || admin == true) {
                         if (status) {
                             var option = "<option value=\"true\">Не продано</option>\n<option value=\"false\">Продано</option>";
                         } else {
@@ -64,11 +66,11 @@
     </script>
 </head>
 <body>
-<form action="${pageContext.servletContext.contextPath}/status" method="post" name="descForm" id="descForm">
+<form:form action="${pageContext.servletContext.contextPath}/status" method="post" name="descForm" id="descForm">
     <table id="table" class="table">
     </table>
     </br>
     Цена : <input type="text" disabled class="price" id="price" name="price">
-</form>
+</form:form>
 </body>
 </html>

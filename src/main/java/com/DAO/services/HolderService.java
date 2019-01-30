@@ -3,6 +3,7 @@ package com.DAO.services;
 import com.DAO.repositories.HolderRepository;
 import com.cars_annot.Holder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class HolderService {
     }
 
     public Holder findByLoginAndPassword(String login, String password) {
-       return holderRepository.findByLoginAndPassword(login, password);
+        return holderRepository.findByLoginAndPassword(login, password);
+    }
+
+    public Holder findByLogin(String login) {
+        return holderRepository.findByLogin(login);
     }
 }
